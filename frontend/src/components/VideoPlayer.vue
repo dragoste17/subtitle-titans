@@ -60,7 +60,7 @@
 
 .subtitles-overlay {
   position: absolute;
-  bottom: 20px;
+  top: 180%;
   width: 100%;
   text-align: center;
   pointer-events: none;
@@ -71,7 +71,7 @@
   display: inline-block;
   background: rgba(0, 0, 0, 0.6);
   color: white;
-  font-size: 18px;
+  font-size: 32px;
   padding: 5px 10px;
   border-radius: 5px;
 }
