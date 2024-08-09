@@ -5,8 +5,11 @@
         <SubtitlesList />
       </v-col>
       <v-col cols="9">
-        <VideoPlayer />
-        <SubtitleTimeline />
+        <v-row>
+          <v-col cols="12">
+            <VideoPlayer />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -15,5 +18,4 @@
 <script setup>
   import SubtitlesList from './SubtitlesList.vue'
   import VideoPlayer from './VideoPlayer.vue'
-  import SubtitleTimeline from './SubtitleTimeline.vue'
 </script>
