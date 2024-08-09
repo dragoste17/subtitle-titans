@@ -3,6 +3,7 @@ import os.path
 from fastapi import FastAPI
 from fastapi import File, UploadFile
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 from deepgram_transcribe import main
 import json
 import logging
@@ -12,11 +13,18 @@ logging_format = "Module: %(name)s\tFilename: %(filename)s:%(lineno)d\tFunction:
 logging.basicConfig(format=logging_format)  # 標準出力のフォーマットは、loggingで設定
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.DEBUG)
-file_sh = logging.FileHandler('../../../server/debug.log')  # ログファイルに出力するHandlerの設定
+file_sh = logging.FileHandler('./debug.log')  # ログファイルに出力するHandlerの設定
 file_sh.setFormatter(logging.Formatter(logging_format))
 
 app = FastAPI()
-
+origins = ["http://localhost:3000"]  # Replace with your frontend URL
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():

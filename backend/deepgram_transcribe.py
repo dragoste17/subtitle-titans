@@ -17,7 +17,7 @@ logging_format = "Module: %(name)s\tFilename: %(filename)s:%(lineno)d\tFunction:
 logging.basicConfig(format=logging_format)  # 標準出力のフォーマットは、loggingで設定
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.DEBUG)
-file_sh = logging.FileHandler('../../../server/debug.log')  # ログファイルに出力するHandlerの設定
+file_sh = logging.FileHandler('./debug.log')  # ログファイルに出力するHandlerの設定
 file_sh.setFormatter(logging.Formatter(logging_format))
 
 
