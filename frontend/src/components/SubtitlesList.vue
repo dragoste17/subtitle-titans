@@ -40,8 +40,11 @@
           </v-list-item>
         </v-list>
 
-        <v-btn class="mt-4" color="primary" @click="addSubtitle">
+        <v-btn class="mt-4" color="primary" prepend-icon="mdi-plus" @click="addSubtitle">
           Add New Subtitle
+        </v-btn>
+        <v-btn class="mt-4 ml-4" color="primary" prepend-icon="mdi-download" @click="downloadSRT">
+          Download SRT
         </v-btn>
       </v-col>
     </v-row>
@@ -108,6 +111,18 @@
   const parseTime = timeString => {
     const [minutes, seconds, milliseconds] = timeString.split(':').map(Number)
     return minutes * 60 + seconds + milliseconds / 1000
+  }
+
+  const downloadSRT = () => {
+    const srtData = subtitlesStore.convertToSRT()
+    const blob = new Blob([srtData], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'subtitles.srt'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   // Watch for changes in subtitles and update the formatted times
