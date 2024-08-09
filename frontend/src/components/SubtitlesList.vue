@@ -40,7 +40,7 @@
           </v-list-item>
         </v-list>
 
-        <v-btn color="primary" @click="addSubtitle">
+        <v-btn class="mt-4" color="primary" @click="addSubtitle">
           Add New Subtitle
         </v-btn>
       </v-col>
@@ -59,13 +59,21 @@
   const formattedOutTimes = ref(subtitles.map(sub => formatTime(sub.outTime)))
 
   const addSubtitle = () => {
-    subtitlesStore.addSubtitle(0, 2, 'New Subtitle')
-    formattedInTimes.value.push(formatTime(0))
-    formattedOutTimes.value.push(formatTime(2))
+    if (subtitles.length === 0) {
+      subtitlesStore.addSubtitle('', parseTime('00:00:000'), parseTime('00:02:000'))
+      formattedInTimes.value.push(formatTime(0))
+      formattedOutTimes.value.push(formatTime(2))
+      return
+    }
+
+    const lastSubtitle = subtitles[subtitles.length - 1]
+    subtitlesStore.addSubtitle('', lastSubtitle.outTime, lastSubtitle.outTime + 2)
+    formattedInTimes.value.push(formatTime(lastSubtitle.outTime))
+    formattedOutTimes.value.push(formatTime(lastSubtitle.outTime + 2))
   }
 
   const deleteSubtitle = index => {
-    subtitlesStore.removeSubtitle(index)
+    subtitlesStore.deleteSubtitle(index)
     formattedInTimes.value.splice(index, 1)
     formattedOutTimes.value.splice(index, 1)
   }

@@ -5,8 +5,8 @@ export const useSubtitlesStore = defineStore('subtitles', {
     subtitles: [],
   }),
   actions: {
-    addSubtitle () {
-      this.subtitles.push({ text: '', inTime: '', outTime: '' })
+    addSubtitle (text = '', inTime = '00:00:00', outTime = '00:02:00') {
+      this.subtitles.push({ text, inTime, outTime })
     },
     deleteSubtitle (index) {
       this.subtitles.splice(index, 1)
