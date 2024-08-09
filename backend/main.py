@@ -72,8 +72,8 @@ def transcribe(audio: AudioDataModel):
     transcription = main(audio.audio_filename)
     print(transcription)
     json_transcription = json.loads(transcription)
-    sentences = json_transcription["results"]["channels"]["alternatives"]["paragraphs"]["sentences"]
     write_json(audio.transcription_filename, json_transcription)
+    sentences = json_transcription["results"]["channels"][0]["alternatives"][0]["paragraphs"]["paragraphs"][0]["sentences"]
     return sentences
 
 
