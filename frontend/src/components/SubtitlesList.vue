@@ -100,7 +100,7 @@
     const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, '0')
     const milliseconds = Math.floor((timeInSeconds % 1) * 1000)
       .toString()
-      .padStart(3, '0')
+      .padStart(2, '0')
     return `${minutes}:${seconds}:${milliseconds}`
   }
 

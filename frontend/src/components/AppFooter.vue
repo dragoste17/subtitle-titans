@@ -41,7 +41,10 @@
   const formatTime = timeInSeconds => {
     const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0')
     const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, '0')
-    return `${minutes}:${seconds}`
+    const milliseconds = Math.floor((timeInSeconds % 1) * 1000)
+      .toString()
+      .padStart(2, '0')
+    return `${minutes}:${seconds}:${milliseconds}`
   }
 
   // Calculate chip width based on subtitle duration relative to total video duration
