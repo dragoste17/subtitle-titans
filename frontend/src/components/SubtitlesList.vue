@@ -58,6 +58,16 @@
   const subtitlesStore = useSubtitlesStore()
   const subtitles = subtitlesStore.subtitles
 
+  // Convert time in seconds to mm:ss:ms format
+  const formatTime = timeInSeconds => {
+    const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0')
+    const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, '0')
+    const milliseconds = Math.floor((timeInSeconds % 1) * 1000)
+      .toString()
+      .padStart(2, '0')
+    return `${minutes}:${seconds}:${milliseconds}`
+  }
+
   const formattedInTimes = ref(subtitles.map(sub => formatTime(sub.inTime)))
   const formattedOutTimes = ref(subtitles.map(sub => formatTime(sub.outTime)))
 
@@ -95,16 +105,6 @@
     } else if (key === 'outTime') {
       formattedOutTimes.value[index] = formatTime(seconds)
     }
-  }
-
-  // Convert time in seconds to mm:ss:ms format
-  const formatTime = timeInSeconds => {
-    const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0')
-    const seconds = Math.floor(timeInSeconds % 60).toString().padStart(2, '0')
-    const milliseconds = Math.floor((timeInSeconds % 1) * 1000)
-      .toString()
-      .padStart(2, '0')
-    return `${minutes}:${seconds}:${milliseconds}`
   }
 
   // Convert time from mm:ss:ms format to seconds

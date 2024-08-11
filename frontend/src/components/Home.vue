@@ -21,6 +21,7 @@
 </template>
 
 <script setup>
+  import { useSubtitlesStore } from '@/stores/subtitlesStore'
   import { ref } from 'vue'
   import SubtitlesList from './SubtitlesList.vue'
   import VideoPlayer from './VideoPlayer.vue'
@@ -28,8 +29,13 @@
   import UploadFile from './UploadFile.vue'
 
   const isFileUploaded = ref(false)
+  const subtitlesStore = useSubtitlesStore()
 
-  const handleFileUploaded = () => {
+  const handleFileUploaded = jsonData => {
     isFileUploaded.value = true
+
+    jsonData.forEach(item => {
+      subtitlesStore.addSubtitle(item.text, item.start, item.end)
+    })
   }
 </script>
