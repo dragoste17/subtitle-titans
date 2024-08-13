@@ -11,7 +11,7 @@
             controls
             @timeupdate="updateSubtitle"
           >
-            <source src="/Users/lav-shinde/Downloads/PXL_20240809_031057196.TS.mp4" type="video/mp4">
+            <source src="/Users/matthew-johnson/work/hackathon/2024_08/misc/PXL_20240809_031057196.TS.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
 
@@ -60,7 +60,7 @@
 
 .subtitles-overlay {
   position: absolute;
-  top: 180%;
+  top: 550px;
   width: 100%;
   text-align: center;
   pointer-events: none;

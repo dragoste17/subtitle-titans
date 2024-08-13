@@ -33,7 +33,7 @@
   const handleFileUploaded = jsonData => {
     isFileUploaded.value = true
 
-    jsonData.forEach(item => {
+    jsonData.sentences.forEach(item => {
       subtitlesStore.addSubtitle(item.text, item.start, item.end)
     })
   }
