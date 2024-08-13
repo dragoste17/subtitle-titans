@@ -25,7 +25,6 @@
   import { ref } from 'vue'
   import SubtitlesList from './SubtitlesList.vue'
   import VideoPlayer from './VideoPlayer.vue'
-
   import UploadFile from './UploadFile.vue'
 
   const isFileUploaded = ref(false)

@@ -46,8 +46,7 @@
       })
 
       const result = await axios.post('transcribe', {
-        audio_filename: '57196_256br.mp3',
-        transcription_filename: '57196_256br.json',
+        filename: '57196_256br.mp3'
       })
       console.log(result.data)
       // Emit event when the file is successfully uploaded

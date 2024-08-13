@@ -14,54 +14,75 @@ from deepgram import (
 
 logging_format = "Module: %(name)s\tFilename: %(filename)s:%(lineno)d\tFunction: %(funcName)s" \
                  "\n\t%(levelname)s: %(message)s"
-logging.basicConfig(format=logging_format)  # 標準出力のフォーマットは、loggingで設定
+logging.basicConfig(format=logging_format)
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.DEBUG)
-file_sh = logging.FileHandler('./debug.log')  # ログファイルに出力するHandlerの設定
-file_sh.setFormatter(logging.Formatter(logging_format))
+# file_sh = logging.FileHandler('./debug.log')
+# file_sh.setFormatter(logging.Formatter(logging_format))
 
 
-def initialize_client():
+def initialize_client() -> DeepgramClient:
+    """
+    Load the api key and initialize a deepgram-client.
+
+    Returns:
+        deepgram_client (DeepgramClient): DeepgramClient instance.
+    """
     api_key = os.environ.get('DEEPGRAM_API_KEY', "")
-    assert api_key, 'Getting API key fucked up.'
-    # STEP 1 Create a Deepgram client using the API key in the environment variables
+    assert api_key, 'Failure retrieving API key.'
     config: DeepgramClientOptions = DeepgramClientOptions(
         verbose=verboselogs.SPAM,
     )
-    deepgram: DeepgramClient = DeepgramClient(api_key, config)
-    return deepgram
+    return DeepgramClient(api_key, config)
 
 
-def initialize_client_options():
-    options: PrerecordedOptions = PrerecordedOptions(
+def initialize_client_options() -> PrerecordedOptions:
+    """
+    Initialize the options for a pre-recorded transcription service.
+
+    Returns:
+        options (PrerecordedOptions): PrerecordedOptions instance.
+    """
+    return PrerecordedOptions(
         model="nova-2",
         smart_format=True,
         utterances=True,
         punctuate=True,
         diarize=True,
     )
-    return options
 
 
-def prepare_payload(audio_filename):
+def prepare_payload(audio_filename: str):
     """
-    Call the transcribe_file method on the rest class
+    Prepare the payload with the audio data to transcribe.
+
+    Args:
+        audio_filename (str): file-path of the audio file to send to deepgram.
+
+    Returns:
+        payload (dict): dictionary containing the file data.
     """
-    print(audio_filename)
-    assert os.path.isfile(audio_filename), f'{audio_filename} is not a file.'
-    with open(audio_filename, "rb") as file:
+    audio_filepath = os.path.join('./audio_files', audio_filename)
+    if not os.path.isfile(audio_filepath):
+        logger.error(f"The audio file: {audio_filepath} does not exist.")
+        raise FileNotFoundError(f'{audio_filepath} is not a file.')
+
+    with open(audio_filepath, "rb") as file:
         buffer_data = file.read()
-
-    payload: FileSource = {
-        "buffer": buffer_data,
-    }
+    logger.info(f"{audio_filepath} read in, preparing to send to deepgram.")
+    payload: FileSource = {"buffer": buffer_data}
     return payload
 
 
-def main(audio_filename):
+def deepgram_transcribe(audio_filename):
     deepgram_client = initialize_client()
     options = initialize_client_options()
-    payload = prepare_payload(audio_filename)
+    try:
+        payload = prepare_payload(audio_filename)
+    except FileNotFoundError as e:
+        logger.error(f"An audio file: {audio_filename} does not exist, preparing the deepgram payload has failed."
+                     f"Exception: {e}")
+        raise e
 
     t0 = datetime.now()
     response = None
@@ -71,12 +92,12 @@ def main(audio_filename):
         )
     except Exception as e:
         logger.error(f"Exception: {e}")
+
     t1 = datetime.now()
     difference = t1 - t0
     logger.info(f"Transcription time: {difference.seconds}")
-
     return response.to_json(indent=4)
 
 
 if __name__ == "__main__":
-    main('./server/57196.mp3')
+    deepgram_transcribe('./server/57196.mp3')

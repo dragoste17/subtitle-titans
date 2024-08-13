@@ -3,10 +3,7 @@
 ## Backend
 
 ```
-pip install fastapi
-pip install deepgram-sdk
-pip install python-multipart
-pip install "fastapi[standard]"
+pip install -r ./backend/requirements.txt
 cd backend
 fastapi dev main.py
 ```
@@ -14,5 +11,8 @@ fastapi dev main.py
 ## Fronted
 ```
 cd frontend
+npm install  # if necessary
 npm run dev
 ```
+
+
