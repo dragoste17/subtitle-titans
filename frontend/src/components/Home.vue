@@ -25,7 +25,6 @@
   import { ref } from 'vue'
   import SubtitlesList from './SubtitlesList.vue'
   import VideoPlayer from './VideoPlayer.vue'
-
   import UploadFile from './UploadFile.vue'
 
   const isFileUploaded = ref(false)
@@ -34,7 +33,7 @@
   const handleFileUploaded = jsonData => {
     isFileUploaded.value = true
 
-    jsonData.forEach(item => {
+    jsonData.sentences.forEach(item => {
       subtitlesStore.addSubtitle(item.text, item.start, item.end)
     })
   }

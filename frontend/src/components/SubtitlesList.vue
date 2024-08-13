@@ -3,42 +3,44 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-list>
-          <v-list-item
-            v-for="(subtitle, index) in subtitles"
-            :key="index"
-          >
-            <v-list-item-content>
-              <v-text-field
-                v-model="subtitle.text"
-                dense
-                label="Subtitle"
-                @input="updateSubtitle(index, subtitle)"
-              />
-              <div class="time-fields">
-                <!-- Editable Start Time -->
+        <div class="scrollable-container">
+          <v-list>
+            <v-list-item
+              v-for="(subtitle, index) in subtitles"
+              :key="index"
+            >
+              <v-list-item-content>
                 <v-text-field
-                  v-model="formattedInTimes[index]"
+                  v-model="subtitle.text"
                   dense
-                  label="Start Time"
-                  @input="updateTime(index, 'inTime', formattedInTimes[index])"
+                  label="Subtitle"
+                  @input="updateSubtitle(index, subtitle)"
                 />
-                <!-- Editable End Time -->
-                <v-text-field
-                  v-model="formattedOutTimes[index]"
-                  dense
-                  label="End Time"
-                  @input="updateTime(index, 'outTime', formattedOutTimes[index])"
-                />
-              </div>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn icon @click="deleteSubtitle(index)">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
+                <div class="time-fields">
+                  <!-- Editable Start Time -->
+                  <v-text-field
+                    v-model="formattedInTimes[index]"
+                    dense
+                    label="Start Time"
+                    @input="updateTime(index, 'inTime', formattedInTimes[index])"
+                  />
+                  <!-- Editable End Time -->
+                  <v-text-field
+                    v-model="formattedOutTimes[index]"
+                    dense
+                    label="End Time"
+                    @input="updateTime(index, 'outTime', formattedOutTimes[index])"
+                  />
+                </div>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn icon @click="deleteSubtitle(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </div>
 
         <v-btn class="mt-4" color="primary" prepend-icon="mdi-plus" @click="addSubtitle">
           Add New Subtitle
@@ -140,5 +142,11 @@
 .time-fields {
   display: flex;
   gap: 10px;
+}
+
+.scrollable-container {
+  height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
 }
 </style>

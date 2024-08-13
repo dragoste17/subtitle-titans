@@ -8,10 +8,11 @@
               v-for="(subtitle, index) in subtitles"
               :key="index"
               class="timeline-chip"
+              label
               :style="{
                 left: `${calculateChipPosition(subtitle.inTime)}%`,
                 width: `${calculateChipWidth(subtitle)}%`,
-                'min-height': '90%'
+                'min-height': '70%'
               }"
               variant="elevated"
             >
