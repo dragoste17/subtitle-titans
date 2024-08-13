@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi import File, UploadFile
 from pydantic import BaseModel
 from deepgram_transcribe import main
+from time_converter import convert_seconds_to_timestamp
 import json
 import logging
 
@@ -55,6 +56,11 @@ def read_json(filename):
     logger.info(f"{filename} read in.")
     return data
 
+def write_string_to_file(filename, contents):
+    with open(filename, 'w', encoding='utf8') as file:
+        file.write(contents)
+    logger.info(f'{filename} has been written.')
+
 
 @app.post("/transcribe/")
 def transcribe(audio: AudioDataModel):
@@ -62,31 +68,30 @@ def transcribe(audio: AudioDataModel):
 
     """
     transcription = main(audio.audio_filename)
-    print(transcription)
     json_transcription = json.loads(transcription)
     write_json(audio.transcription_filename, json_transcription)
     return audio
 
 
 class SrtInputData(BaseModel):
-    filename: str
+    input_filename: str
+    output_filename: str
 
 
 def sentences_to_srt(sentences_list):
-    output=""
-#    for sdx, sentence in sentences_list:
-#        sdx
-#        start_ts = convert_seconds_to_timestamp(sentence["start"])
-#        end_ts = convert_seconds_to_timestamp(sentence["end"])
-#        sentence["text"]
+    output = ""
+    for sdx, sentence in enumerate(sentences_list):
+        start_ts = convert_seconds_to_timestamp(sentence["start"])
+        end_ts = convert_seconds_to_timestamp(sentence["end"])
+        output += f"{sdx}\n{start_ts} --> {end_ts}\n{sentence['text']}\n\n"
 
-        #output
+    return output
 
 
 @app.post("/srt/")
 def srt(srt_input: SrtInputData):
-    data = read_json(srt_input.filename)
-
-    sentences = data["results"]["channels"]["alternatives"]["paragraphs"]["sentences"]
-
-    return {"message": "happy"}
+    data = read_json(srt_input.input_filename)
+    sentences = data["results"]["channels"][0]["alternatives"][0]["paragraphs"]["paragraphs"][0]["sentences"]
+    srt_output = sentences_to_srt(sentences)
+    write_string_to_file(srt_input.output_filename, srt_output)
+    return {"sentences": sentences}
